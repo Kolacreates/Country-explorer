@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Country Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1><span class="globe">🌍</span>Country Explorer</h1>
+    <div class="hero-rule"></div>
+    <p class="subtitle">Search any country to see its details</p>
+
+    <!-- Search form - submits to POST /search -->
+    <form action="/search" method="POST" class="search-form">
+      <input
+        type="text"
+        name="countryName"
+        placeholder="e.g. Nigeria, Japan, Brazil..."
+        required
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Show an error message if the search failed -->
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <!-- Show the country card only if we have data -->
+    <% if (country) { %>
+      <div class="country-card">
+        <div class="flag-frame">
+  <img src="<%= country.flag %>" alt="Flag of <%= country.name %>" class="flag" />
+</div>
+
+        <h2><%= country.name %></h2>
+        <p class="official-name"><%= country.officialName %></p>
+
+        <ul class="details">
+          <li><strong>Capital:</strong> <%= country.capital %></li>
+          <li><strong>Region:</strong> <%= country.region %> (<%= country.subregion %>)</li>
+          <li><strong>Population:</strong> <%= country.population %></li>
+          <li><strong>Currencies:</strong> <%= country.currencies %></li>
+          <li><strong>Languages:</strong> <%= country.languages %></li>
+        </ul>
+
+        <!-- Bordering countries, if any -->
+        <% if (country.borders.length > 0) { %>
+          <div class="borders">
+            <strong>Borders:</strong>
+            <% country.borders.forEach(function(border) { %>
+              <span class="border-tag"><%= border %></span>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="borders"><strong>Borders:</strong> None (island nation)</p>
+        <% } %>
+
+        <a href="<%= country.maps %>" target="_blank" class="map-link">View on Google Maps</a>
+      </div>
+    <% } %>
+  </div>
+
+</body>
+</html>
